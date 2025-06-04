@@ -32,7 +32,6 @@
       overflow-x: hidden;
     }
 
-    
     .content-wrapper {
       min-height: 100vh;
       display: flex;
@@ -99,7 +98,49 @@
       width: 100%;
     }
 
-  
+   
+    .has-tooltip {
+      position: relative;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(94, 59, 38, 0.9);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 100;
+      white-space: nowrap;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(165, 108, 67, 0.3);
+    }
+
+    .tooltip::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 10px;
+      height: 10px;
+      background: rgba(94, 59, 38, 0.9);
+      border-top: 1px solid rgba(165, 108, 67, 0.3);
+      border-left: 1px solid rgba(165, 108, 67, 0.3);
+    }
+
+    .has-tooltip:hover .tooltip {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+      bottom: -45px;
+    }
+
     .main-content {
       flex: 1;
       display: flex;
@@ -184,6 +225,17 @@
       color: var(--text-light);
     }
 
+
+    .hover-effect {
+      display: inline-block;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .hover-effect:hover {
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
     @media (max-width: 768px) {
       #navbar {
         padding: 1rem;
@@ -210,34 +262,39 @@
 </head>
 <body>
   <div class="content-wrapper">
-   
     <nav id="navbar">
       <a href="/" class="logo">
-        Acorn Proxy
+        <span class="hover-effect">Acornz</span>
       </a>
       <div class="nav-links">
-        <a href="/search" class="nav-link">SEARCH</a>
-        <a href="/apps" class="nav-link">APPS</a>
-        <a href="/games" class="nav-link">GAMES</a>
-        <a href="/settings" class="nav-link">SETTINGS</a>
+        <a href="/apps" class="nav-link has-tooltip">
+          <span class="hover-effect">APPS</span>
+          <span class="tooltip">Unblocked Apps for Acornz</span>
+        </a>
+        <a href="/games" class="nav-link has-tooltip">
+          <span class="hover-effect">GAMES</span>
+          <span class="tooltip">Games for Acornz</span>
+        </a>
+        <a href="/settings" class="nav-link has-tooltip">
+          <span class="hover-effect">SETTINGS</span>
+          <span class="tooltip">Settings for Acornz</span>
+        </a>
       </div>
     </nav>
 
-
     <div class="main-content">
       <div class="acorn-container">
-        <div class="acorn-logo">Acorn Proxy</div>
-        <p class="acorn-description">Plant your search here and grow your freedom 🌱</p>
+        <div class="acorn-logo"><span class="hover-effect">Acorn Proxy</span></div>
+        <p class="acorn-description">Plant your search here and <span class="hover-effect">grow your freedom</span> 🌱</p>
         <form class="proxy-form" onsubmit="startProxy(event)">
           <input id="urlInput" type="text" placeholder="Enter URL or search..." autofocus />
-          <button type="submit">Sprout</button>
+          <button type="submit"><span class="hover-effect">Sprout</span></button>
         </form>
-        <div class="footer">Rooted in privacy • Made with 🍂</div>
+        <div class="footer"><span class="hover-effect">Rooted in privacy</span> • Made with 🍂</div>
       </div>
     </div>
   </div>
 
- 
   <script src="/active/uv/uv.bundle.js"></script>
   <script src="/active/uv/uv.config.js"></script>
   <script src="/assets/js/register.js"></script>
@@ -267,6 +324,14 @@
       
       window.location.href = proxyUrl;
     }
+
+
+    document.querySelectorAll('span').forEach(span => {
+      if (!span.classList.contains('hover-effect') && 
+          !span.classList.contains('tooltip')) {
+        span.classList.add('hover-effect');
+      }
+    });
   </script>
 </body>
 </html>
