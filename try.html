@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acornz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --primary: #5e3b26;
+      --secondary: #a56c43;
+      --accent: #c47f50;
+      --text: #f5f0e6;
+      --text-light: #d2bfae;
+      --bg-gradient: linear-gradient(#3e2f23, #8b5e3c);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-gradient);
+      color: var(--text);
+      font-family: 'Quicksand', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+
+    .password-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .password-container {
+      background: var(--primary);
+      padding: 2rem;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .password-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 1rem 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(245, 240, 230, 0.9);
+      color: var(--primary);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .password-input:focus {
+      box-shadow: 0 0 0 3px var(--accent);
+    }
+
+    .password-submit {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .password-submit:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .password-error {
+      color: #ff6b6b;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .discord-link {
+      margin-top: 1.5rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .discord-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .discord-link a:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
+
+    .blur-content {
+      filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .content-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: filter 0.3s ease;
+    }
+
+    #navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(94, 59, 38, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(165, 108, 67, 0.2);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo::before {
+      content: "🌰";
+      margin-right: 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .has-tooltip {
+      position: relative;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(94, 59, 38, 0.9);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 100;
+      white-space: nowrap;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(165, 108, 67, 0.3);
+    }
+
+    .tooltip::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 10px;
+      height: 10px;
+      background: rgba(94, 59, 38, 0.9);
+      border-top: 1px solid rgba(165, 108, 67, 0.3);
+      border-left: 1px solid rgba(165, 108, 67, 0.3);
+    }
+
+    .has-tooltip:hover .tooltip {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+      bottom: -45px;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5rem 2rem 2rem; 
+      margin-top: 60px;
+    }
+
+    .acorn-container {
+      background: var(--primary);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      transform: translateY(-20%); 
+    }
+
+    .acorn-logo {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .acorn-logo::before {
+      content: "🌰";
+      margin-right: 10px;
+    }
+
+    .acorn-description {
+      margin-bottom: 20px;
+      color: var(--text-light);
+    }
+
+    .proxy-form {
+      width: 100%;
+    }
+
+    input[type="text"] {
+      padding: 12px 20px;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      margin-top: 20px;
+      font-size: 1rem;
+      outline: none;
+      background: rgba(245, 240, 230, 0.9);
+      color: #3e2f23;
+      transition: box-shadow 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      box-shadow: 0 0 0 3px var(--accent);
+    }
+
+    button {
+      margin-top: 15px;
+      background: var(--secondary);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .hover-effect {
+      display: inline-block;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .hover-effect:hover {
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      #navbar {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .acorn-container {
+        padding: 30px 20px;
+        transform: translateY(-10%);
+      }
+
+      .main-content {
+        padding: 6rem 1rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="passwordModal" class="password-modal">
+    <div class="password-container">
+      <h1 class="password-title">Enter Password</h1>
+      <input type="password" id="passwordInput" class="password-input" placeholder="Enter password..." autofocus>
+      <button id="passwordSubmit" class="password-submit">Unlock</button>
+      <p id="passwordError" class="password-error">Incorrect password. Please try again.</p>
+      <p class="discord-link">If you don't know the password, join our discord server <a href="https://discord.com/invite/BJwdeHAsuR" target="_blank">here</a></p>
+    </div>
+  </div>
+
+  <div id="contentWrapper" class="content-wrapper blur-content">
+    <nav id="navbar">
+      <a href="/" class="logo">
+        <span class="hover-effect">Acornz</span>
+      </a>
+      <div class="nav-links">
+        <a href="/apps" class="nav-link has-tooltip">
+          <span class="hover-effect">APPS</span>
+          <span class="tooltip">Unblocked Apps for Acornz</span>
+        </a>
+        <a href="/games" class="nav-link has-tooltip">
+          <span class="hover-effect">GAMES</span>
+          <span class="tooltip">Games for Acornz</span>
+        </a>
+        <a href="/settings" class="nav-link has-tooltip">
+          <span class="hover-effect">SETTINGS</span>
+          <span class="tooltip">Settings for Acornz</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="acorn-container">
+        <div class="acorn-logo"><span class="hover-effect">Acorn Proxy</span></div>
+        <p class="acorn-description">Plant your search here and <span class="hover-effect">grow your freedom</span> 🌱</p>
+        <form class="proxy-form" onsubmit="startProxy(event)">
+          <input id="urlInput" type="text" placeholder="Enter URL or search..." autofocus />
+          <button type="submit"><span class="hover-effect">Sprout</span></button>
+        </form>
+        <div class="footer"><span class="hover-effect">Rooted in privacy</span> • Made with 🍂</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/active/uv/uv.bundle.js"></script>
+  <script src="/active/uv/uv.config.js"></script>
+  <script src="/assets/js/register.js"></script>
+
+  <script>
+
+    const CORRECT_PASSWORD = "Acorn!";
+    const STORAGE_KEY = "acornz_authenticated";
+    
+    const passwordModal = document.getElementById('passwordModal');
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordSubmit = document.getElementById('passwordSubmit');
+    const passwordError = document.getElementById('passwordError');
+    const contentWrapper = document.getElementById('contentWrapper');
+
+
+    function checkAuth() {
+      const isAuthenticated = localStorage.getItem(STORAGE_KEY) === 'true';
+      if (isAuthenticated) {
+        unlockContent();
+      }
+    }
+
+
+    function unlockContent() {
+      contentWrapper.classList.remove('blur-content');
+      passwordModal.style.display = 'none';
+      localStorage.setItem(STORAGE_KEY, 'true');
+    }
+
+
+    function handlePasswordSubmit() {
+      if (passwordInput.value === CORRECT_PASSWORD) {
+        unlockContent();
+      } else {
+        passwordError.style.display = 'block';
+        passwordInput.focus();
+      }
+    }
+
+    passwordSubmit.addEventListener('click', handlePasswordSubmit);
+    passwordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handlePasswordSubmit();
+      }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', checkAuth);
+
+
+    function generateSearchUrl(query) {
+      try {
+        const url = new URL(query);
+        return url.toString();
+      } catch {
+        try {
+          const url = new URL(`https://${query}`);
+          if (url.hostname.includes('.')) return url.toString();
+        } catch {}
+      }
+      return `https://duckduckgo.com/?q=${encodeURIComponent(query)}&t=ffab&ia=web`;
+    }
+
+    function startProxy(e) {
+      e.preventDefault();
+      const input = document.getElementById("urlInput").value.trim();
+      if (!input) return;
+
+      const rawUrl = generateSearchUrl(input);
+      const encoded = __uv$config.encodeUrl(rawUrl);
+      const proxyUrl = __uv$config.prefix + encoded;
+      
+      window.location.href = proxyUrl;
+    }
+
+    document.querySelectorAll('span').forEach(span => {
+      if (!span.classList.contains('hover-effect') && 
+          !span.classList.contains('tooltip')) {
+        span.classList.add('hover-effect');
+      }
+    });
+  </script>
+</body>
+</html>
