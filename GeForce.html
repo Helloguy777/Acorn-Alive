@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
+    <title>GeForce Now</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000000; /* Background color */
+            color: white; /* Text color */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        #message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+        }
+
+        #message img {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+
+        #message a {
+            color: hsl(289, 100%, 50%);
+            text-decoration: underline;
+        }
+
+        #message p {
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        #download-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: hsl(289, 100%, 50%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #download-btn:hover {
+            background-color: hsl(289, 80%, 50%);
+        }
+
+        #install-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: hsl(289, 100%, 50%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: none; /* Hidden by default until prompt is available */
+        }
+
+        #install-button:hover {
+            background-color: hsl(289, 80%, 50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="message">
+        <img src="lvlogo.png" alt="LupineVault">
+        <img src="froggies.gif" alt="Froggie">
+        <p>Thanks for all the support and setting this up LupineVault (RWH) & Froggies Arcade!! Check them out here: <a href="https://lupinevault.com/info/index.html">LV Partner's page</a>.</p>
+        <button id="install-button">Install App</button> <!-- Button to install PWA -->
+    </div>
+    <iframe src="/active/embed.html?url=https://play.geforcenow.com/"></iframe>
+
+    <script>
+        // Service Worker registration and install button code
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+            });
+        }
+
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); // Prevent the mini-info banner from appearing
+            deferredPrompt = e; // Stash the event so it can be triggered later
+            document.getElementById('install-button').style.display = 'block'; // Show the install button
+
+            document.getElementById('install-button').addEventListener('click', () => {
+                document.getElementById('install-button').style.display = 'none'; // Hide the install button
+                deferredPrompt.prompt(); // Show the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null; // Clear the deferred prompt
+                });
+            });
+        });
+
+        // Hide the message and show iframe after a timeout
+        setTimeout(() => {
+            document.getElementById('message').style.display = 'none';
+            document.querySelector('iframe').style.display = 'block';
+        }, 2000);
+    </script>
+</body>
+</html>
