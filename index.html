@@ -32,7 +32,6 @@
       overflow-x: hidden;
     }
 
-
     .password-modal {
       position: fixed;
       top: 0;
@@ -156,6 +155,11 @@
       font-size: 1.5rem;
       color: var(--text);
       text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .logo:hover {
+      color: var(--accent);
     }
 
     .logo::before {
@@ -169,72 +173,17 @@
     }
 
     .nav-link {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1.1rem;
       color: var(--text-light);
       text-decoration: none;
-      font-weight: 600;
       transition: color 0.3s ease;
-      position: relative;
     }
 
     .nav-link:hover {
-      color: var(--text);
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      bottom: -5px;
-      left: 0;
-      background-color: var(--accent);
-      transition: width 0.3s ease;
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
-
-    .has-tooltip {
-      position: relative;
-    }
-
-    .tooltip {
-      position: absolute;
-      background: rgba(94, 59, 38, 0.9);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      font-size: 0.8rem;
-      bottom: -40px;
-      left: 50%;
-      transform: translateX(-50%) scale(0);
-      opacity: 0;
-      transition: all 0.3s ease;
-      pointer-events: none;
-      z-index: 100;
-      white-space: nowrap;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(165, 108, 67, 0.3);
-    }
-
-    .tooltip::before {
-      content: '';
-      position: absolute;
-      top: -5px;
-      left: 50%;
-      transform: translateX(-50%) rotate(45deg);
-      width: 10px;
-      height: 10px;
-      background: rgba(94, 59, 38, 0.9);
-      border-top: 1px solid rgba(165, 108, 67, 0.3);
-      border-left: 1px solid rgba(165, 108, 67, 0.3);
-    }
-
-    .has-tooltip:hover .tooltip {
-      transform: translateX(-50%) scale(1);
-      opacity: 1;
-      bottom: -45px;
+      color: var(--accent);
     }
 
     .main-content {
@@ -323,12 +272,11 @@
 
     .hover-effect {
       display: inline-block;
-      transition: transform 0.3s ease, color 0.3s ease;
+      transition: color 0.3s ease;
     }
 
     .hover-effect:hover {
       color: var(--accent);
-      transform: translateY(-2px);
     }
 
     @media (max-width: 768px) {
@@ -370,20 +318,17 @@
   <div id="contentWrapper" class="content-wrapper blur-content">
     <nav id="navbar">
       <a href="/" class="logo">
-        <span class="hover-effect">Acornz</span>
+        <span>Acornz</span>
       </a>
       <div class="nav-links">
-        <a href="/apps" class="logo">
-          <span class="hover-effect">APPS</span>
-          <span class="tooltip">Unblocked Apps for Acornz</span>
+        <a href="/apps" class="nav-link">
+          <span>APPS</span>
         </a>
-        <a href="/games" class="logo">
-          <span class="hover-effect">GAMES</span>
-          <span class="tooltip">Games for Acornz</span>
+        <a href="/games" class="nav-link">
+          <span>GAMES</span>
         </a>
-        <a href="/settings" class="logo">
-          <span class="hover-effect">SETTINGS</span>
-          <span class="tooltip">Settings for Acornz</span>
+        <a href="/settings" class="nav-link">
+          <span>SETTINGS</span>
         </a>
       </div>
     </nav>
@@ -406,7 +351,6 @@
   <script src="/assets/js/register.js"></script>
 
   <script>
-
     const CORRECT_PASSWORD = "Acorn!";
     const STORAGE_KEY = "acornz_authenticated";
     
@@ -416,7 +360,6 @@
     const passwordError = document.getElementById('passwordError');
     const contentWrapper = document.getElementById('contentWrapper');
 
-
     function checkAuth() {
       const isAuthenticated = localStorage.getItem(STORAGE_KEY) === 'true';
       if (isAuthenticated) {
@@ -424,13 +367,11 @@
       }
     }
 
-
     function unlockContent() {
       contentWrapper.classList.remove('blur-content');
       passwordModal.style.display = 'none';
       localStorage.setItem(STORAGE_KEY, 'true');
     }
-
 
     function handlePasswordSubmit() {
       if (passwordInput.value === CORRECT_PASSWORD) {
@@ -448,9 +389,7 @@
       }
     });
 
-
     document.addEventListener('DOMContentLoaded', checkAuth);
-
 
     function generateSearchUrl(query) {
       try {
