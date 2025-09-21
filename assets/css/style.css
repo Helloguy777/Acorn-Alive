@@ -87,6 +87,7 @@ input[type="text"] {
     width: 300px;
     border: none;
     border-radius: 25px;
+    margin-top: 20px;
     background: rgba(25, 25, 25, 0.9);
     color: white;
     font-size: 1rem;
@@ -143,4 +144,52 @@ button:hover {
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
-}
+}```
+
+---
+
+### Шаг 2: Замените `index.html`
+
+Этот новый HTML-код построен специально для вашего нового CSS. В нем есть сайдбар, центральный контейнер и все необходимые классы.
+
+#### 📜 `index.html` (обновленный)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreedomNet</title>
+    <!-- Подключаем иконки Font Awesome для сайдбара -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <button onclick="location.href='/'" title="Home"><i class="fas fa-home"></i></button>
+        <button onclick="location.href='/apps.html'" title="Apps"><i class="fas fa-th-large"></i></button>
+        <button onclick="location.href='/games.html'" title="Games"><i class="fas fa-gamepad"></i></button>
+        <button onclick="location.href='/settings.html'" title="Settings"><i class="fas fa-cog"></i></button>
+    </div>
+
+    <div class="container">
+        <h1 class="title">FreedomNet<span class="dot">.</span></h1>
+        <form id="searchForm">
+            <input id="urlInput" type="text" placeholder="Enter a URL or search..." autofocus>
+            <br>
+            <button type="submit">Launch</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        Powered by Ultraviolet
+    </div>
+
+    <script src="/active/uv/uv.bundle.js"></script>
+    <script src="/active/uv/uv.config.js"></script>
+    <script src="/assets/js/index.js"></script>
+    <script src="/assets/js/register.js"></script>
+</body>
+</html>
